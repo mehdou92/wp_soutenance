@@ -1,0 +1,18 @@
+/*
+Theme Name: Template Paris-Saint-Germain
+Template: twentyseventeen
+ */
+
+@import url(../twentyseventeen/style.css);
+
+header > .page-title {
+    color: #ed1c24;
+}
+
+.entry-title a {
+    color: #122657;
+}
+
+.entry-meta a {
+    color : #9c1419;
+}
