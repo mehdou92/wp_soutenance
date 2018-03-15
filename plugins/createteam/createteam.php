@@ -54,32 +54,53 @@ Class Create_Team
 
 
             function initialisation_metaboxes(){
-                add_meta_box('soccer-name', 'Nom du joueur', 'meta_joueur', 'team_creator', 'normal');
-                add_meta_box('film_duree', 'Durée', 'meta_duree', 'team_creator', 'normal');
+                add_meta_box('soccer_goal', 'Selectionnez un Gardien', 'meta_joueur', 'team_creator', 'normal');
+                add_meta_box('soccer_defg', 'Selectionnez le Défenseur gauche', 'meta_joueur', 'team_creator', 'normal');
+                add_meta_box('soccer_defd', 'Selectionnez le Défenseur droit', 'meta_joueur', 'team_creator', 'normal');
+                add_meta_box('soccer_defcg', 'Selectionnez le Défenseur central gauche', 'meta_joueur', 'team_creator', 'normal');
+                add_meta_box('soccer_defcd', 'Selectionnez le Défenseur central droite', 'meta_joueur', 'team_creator', 'normal');
+                add_meta_box('soccer_md', 'Selectionnez le Milieu droit', 'meta_joueur', 'team_creator', 'normal');
+                add_meta_box('soccer_mg', 'Selectionnez le Milieu gauche', 'meta_joueur', 'team_creator', 'normal');
+                add_meta_box('soccer_mc', 'Selectionnez le Milieu central', 'meta_joueur', 'team_creator', 'normal');
+                add_meta_box('soccer_ad', 'Selectionnez l\'attaquant droit', 'meta_joueur', 'team_creator', 'normal');
+                add_meta_box('soccer_ag', 'Selectionnez l\'attaquant gauche', 'meta_joueur', 'team_creator', 'normal');
+                add_meta_box('soccer_ac', 'Selectionnez l\'attaquant central', 'meta_joueur', 'team_creator', 'normal');
+                //add_meta_box('position', 'Position', 'meta_position', 'team_creator', 'normal');
             }
 
-            function meta_joueur($post){
-                $real = get_post_meta($post->ID,'joueur',true);
-                echo '<label for="soccer-name">Nom du joueur : </label>';
-                echo '<select id="soccer-name" name="soccer-name" />';
+            function meta_joueur($post)
+            {
+                global $wpdb;
+
+                $results_joueur = $wpdb->get_results("SELECT soccer_name FROM {$wpdb->prefix}stats_joueurs");
+
+                $results_position = $wpdb->get_results("SELECT position FROM {$wpdb->prefix}position_joueur");
+
+
+                $real = get_post_meta($post->ID, 'joueur', true);
+                echo '<label for="soccer_1">Nom du joueur : </label>';
+                echo '<select id="soccer_1" name="soccer-name" >';
+                foreach ( $results_joueur as $result ) {
+                    echo '<option>'.$result->soccer_name.'</option>';
+                }
+                echo '</select>';
             }
-            function meta_duree($post){
-                $duree = get_post_meta($post->ID,'duree',true);
-                echo '<label for="duree">Durée : </label>';
-                echo '<input id="duree" type="text" name="duree" placeholder="Entrer la durée du film" value="'.$duree.'" required/>';
-                // echo '<input id="duree2" type="range" min="60" max="240" value="'.$duree.'"';
-            }
+
 
             add_action('save_post','save_metaboxes');
-            function save_metaboxes($post_id){
 
-                // si la metabox est définie, on sauvegarde sa valeur
-                if(isset($_POST['realisateur'])){
-                    update_post_meta($post_id,'realisateur', esc_html($_POST['realisateur']));
+            function save_metaboxes(){
+
+                global $post;
+                if(isset($_POST["soccer_1"])){
+                    //UPDATE:
+                    $meta_element_class = $_POST['soccer_1'];
+                    //END OF UPDATE
+
+                    update_post_meta($post->ID, 'meta_joueur', $meta_element_class);
+                    //print_r($_POST);
                 }
-                if(isset($_POST['duree'])){
-                    update_post_meta($post_id,'duree', esc_html($_POST['duree']));
-                }
+
             }
         }
     }
@@ -91,7 +112,12 @@ Class Create_Team
     public static function install()
     {
         global $wpdb;
-        $wpdb->query("CREATE TABLE IF NOT EXISTS {$wpdb->prefix}stat_joueur (id INT AUTO_INCREMENT PRIMARY KEY, name_player VARCHAR(255) NOT NULL);");
+        $wpdb->query("CREATE TABLE IF NOT EXISTS {$wpdb->prefix}stats_joueurs (id INT AUTO_INCREMENT PRIMARY KEY,`soccer_name` varchar(255) NOT NULL,
+                      `nb_matches` int(11) DEFAULT NULL,
+                      `nb_buts` int(11) DEFAULT NULL,
+                      `poste` varchar(255) NOT NULL,
+                      `img_blob` blob NOT NULL,);");
+        $wpdb->query("");
     }
 
     public static function uninstall()
@@ -100,42 +126,5 @@ Class Create_Team
         $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}stat_joueur;");
     }
 }
-
-
-/*
-
-// ajout metabox
-
-
-add_action('add_meta_boxes', 'initialisation_metaboxes');
-function init_metaboxes()
-{
-    //on utilise la fonction add_metabox() pour initialiser une metabox
-    add_meta_box('1', 'Creation Equipe', 'create_team_function', 'post', 'side', 'high');
-}
-
-function create_team_function($post){
-
-    $soccerName = get_post_meta($post->ID,'soccer-name',true);
-    $position = get_post_meta($post->ID,'position',true);
-
-    echo '<label for="soccer-name">Nom du joueur : </label>';
-    echo '<select id="soccer-name" name="soccer-name" />';
-
-    echo '<label for="position">Poste du joueur :</label>';
-    echo '<select id="position" name="position" />';
-
-}
-
-//sauvegarde de la metabox
-
-add_action('save_post','save_metaboxes');
-function save_metaboxes($post_ID){
-
-}
-*/
-
-
-
 
 New Create_Team();
