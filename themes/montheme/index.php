@@ -2,6 +2,9 @@
 //Include header.php
 get_header();
 
+//Executer un shortcode [hello]
+echo do_shortcode( '[hello]' );
+
 //The Loop
 	while (have_posts()) {
 		the_post();

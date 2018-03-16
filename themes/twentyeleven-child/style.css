@@ -1,0 +1,68 @@
+/*
+Theme Name: Template Habibas coiffure
+Template: twentyeleven
+ */
+
+@import url(../twentyeleven/style.css);
+
+
+#page {
+}
+
+#branding {
+    border-top: 1px solid #86AFAC;
+}
+#branding hgroup {
+    padding: 40px 0 30px 0;
+}
+
+#site-title {
+    padding-bottom: 40px;
+}
+
+#site-title a{
+    color: #0B0C0C;
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+#site-description {
+    padding-left: 40px;
+    font-size: 16px;
+}
+
+body {
+    background-color: #ECF3EE;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#access {
+    background: #49494B;
+    height : 70px;
+}
+
+#access li {
+    height: 50px
+}
+
+
+#access .current_page_item > a {
+    font-weight: 300;
+}
+
+#access a {
+    line-height: 4em;
+}
+
+.menu > ul > li > a {
+    height: 70px;
+    font-size: 18px;
+}
+
+
+
+
+
+
+
+
